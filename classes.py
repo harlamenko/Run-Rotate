@@ -314,7 +314,7 @@ class Player(Dynamic):
 class Box(Dynamic):
     def __init__(self,xspeed, yspeed, size,image,coords, danger=False):
         super(Box, self).__init__(xspeed, yspeed, size, coords, image, danger)
-    
+
 class Cv(object):
     def __init__(self):
         self._hmin = 0
@@ -359,12 +359,11 @@ class Cv(object):
             upper_color = np.array([self._hmax,self._smax,self._vmax])
             mask = cv2.inRange(hsv, lower_color, upper_color)
             res = cv2.bitwise_and(frame, frame, mask=mask)
-            image, contours, hierarchy = cv2.findContours(mask.copy(),\
-               cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+            contours, image = cv2.findContours(mask.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
             if len(contours):
                 visio_control = True
-                cnt = max(contours, key = lambda x: cv2.contourArea(x))
+                cnt = max(contours, key = cv2.contourArea)
                 x, y, w, h = cv2.boundingRect(cnt)
 
                 if x > DISPLAY_WIDTH//2:
